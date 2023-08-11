@@ -13,14 +13,11 @@ import java.util.*;
 class TextEditor extends JFrame implements ActionListener {
     Boolean portait = true;
     JTextArea ta = new JTextArea();
-    String title = "Untitled Notepad";
     int i, len1, len, pos1;
     String str = "", s3 = "", s2 = "", s4 = "", s32 = "", s6 = "", s7 = "", s8 = "", s9 = "";
-    String months[] = { "January", "February", "March", "April", "May", "June", "July", "August", "September",
-            "October", "November", "December" };
+    String months[] = {"January", "February", "March", "April", "May", "June", "July", "August", "September",
+            "October", "November", "December"};
     CheckboxMenuItem chkb = new CheckboxMenuItem("Word Wrap", true);
-    // i found out this is a C way of making this array but it's handydandy
-    final int[] portraitDimensions = {300, 500};
 
     public TextEditor() {
         MenuBar mb = new MenuBar();
@@ -39,15 +36,15 @@ class TextEditor extends JFrame implements ActionListener {
                 new MenuItem("New"), new MenuItem("Open"), new MenuItem("Save"), new MenuItem("Save As"),
                 new MenuItem("Page Setup"), new MenuItem("Print"), new MenuItem("Exit")
         };
-        MenuItem mi2[] = { new MenuItem("Delete"), new MenuItem("Cut"),
+        MenuItem mi2[] = {new MenuItem("Delete"), new MenuItem("Cut"),
                 new MenuItem("Copy"), new MenuItem("Paste"), new MenuItem("Find"),
                 new MenuItem("Find Next"), new MenuItem("Replace"),
                 new MenuItem("Go To"), new MenuItem("Select All"),
-                new MenuItem("Time Stamp") };
-        MenuItem mi3[] = { new MenuItem("Choose Font"), new MenuItem("Compile"),
-                new MenuItem("Run") };
-        MenuItem mi4[] = { new MenuItem("Help Topics"),
-                new MenuItem("About TextEditor") };
+                new MenuItem("Time Stamp")};
+        MenuItem mi3[] = {new MenuItem("Choose Font"), new MenuItem("Compile"),
+                new MenuItem("Run")};
+        MenuItem mi4[] = {new MenuItem("Help Topics"),
+                new MenuItem("About TextEditor")};
         for (int i = 0; i < mi1.length; i++) {
             m1.add(mi1[i]);
             mi1[i].addActionListener(this);
@@ -75,12 +72,11 @@ class TextEditor extends JFrame implements ActionListener {
         actionPerformed(new ActionEvent(this, 0, "Word Wrap"));
 
         setSize(300, 500);
-        setTitle(title);
+        setTitle("untitled notepad");
         setVisible(true);
     }
 
     public void actionPerformed(ActionEvent ae) {
-
         String arg = (String) ae.getActionCommand();
         if (arg.equals("New")) {
             dispose();
@@ -88,8 +84,8 @@ class TextEditor extends JFrame implements ActionListener {
             t11.setSize(500, 500);
             t11.setVisible(true);
         }
-        try {
-            if (arg.equals("Open")) {
+        if (arg.equals("Open")) {
+            try {
                 FileDialog fd1 = new FileDialog(this, "Select File", FileDialog.LOAD);
                 fd1.setVisible(true);
                 String s4 = "";
@@ -105,24 +101,22 @@ class TextEditor extends JFrame implements ActionListener {
                 }
                 ta.setText(s4);
                 fii.close();
+            } catch (IOException e) {
             }
-        } catch (IOException e) {
         }
-        try {
-            if (arg.equals("Save")) {
+        if (arg.equals("Save")) {
+            try {
                 String fileName = null;
-                if(!s9.equals("")){
+                if (!s9.equals("")) {
                     // save as file
                     fileName = s9;
-                }
-                else if(!s32.equals("")){
+                } else if (!s32.equals("")) {
                     fileName = s32;
                 }
 
-                if(fileName == null){
+                if (fileName == null) {
                     arg = "Save As";
-                }
-                else {
+                } else {
                     s6 = ta.getText();
                     len1 = s6.length();
                     byte buf[] = s6.getBytes();
@@ -134,15 +128,18 @@ class TextEditor extends JFrame implements ActionListener {
                     }
                     fobj.close();
                 }
+            } catch (IOException e) {
             }
-        } catch (IOException e) {
         }
-        try {
-            if (arg.equals("Save As")) {
+        if (arg.equals("Save As")) {
+            try {
                 FileDialog dialog1 = new FileDialog(this, "Save As", FileDialog.SAVE);
                 dialog1.setVisible(true);
                 s7 = dialog1.getDirectory();
                 s8 = dialog1.getFile();
+                if(s7 == null && s8 == null){
+                    throw new IOException();
+                }
                 s9 = s7 + s8 + ".txt";
                 s6 = ta.getText();
                 len1 = s6.length();
@@ -153,31 +150,32 @@ class TextEditor extends JFrame implements ActionListener {
                     fobj1.write(buf[k]);
                 }
                 fobj1.close();
+                this.setTitle(s8 + " TextEditor File");
+            } catch (IOException e) {
+                // i am logging this to the console
+                System.out.println("User closed the dialog and didn't want to save");
             }
-            this.setTitle(s8 + " TextEditor File");
-        } catch (IOException e) {
         }
         if (arg.equals("Exit")) {
             System.exit(0);
         }
-        if(arg.equals("Page Setup")) {
+        if (arg.equals("Page Setup")) {
             JPanel panel = new JPanel();
             JRadioButton jrb1 = new JRadioButton("Landscape");
             JRadioButton jrb2 = new JRadioButton("Portrait");
             ButtonGroup bg = new ButtonGroup();
-            bg.add(jrb1);bg.add(jrb2);
-            panel.add(jrb2);panel.add(jrb1);
+            bg.add(jrb1);
+            bg.add(jrb2);
+            panel.add(jrb2);
+            panel.add(jrb1);
             JOptionPane.showMessageDialog(null, panel, "Select Layout", JOptionPane.QUESTION_MESSAGE);
-            if(jrb1.isSelected() && portait){
+            if (jrb1.isSelected() && portait) {
                 portait = false;
                 setSize(getSize().height, getSize().width);
-            }else if(jrb2.isSelected() && !portait){
+            } else if (jrb2.isSelected() && !portait) {
                 portait = true;
                 setSize(getSize().height, getSize().width);
             }
-
-//                setSize(getSize().height, getSize().width);
-
         }
         if (arg.equals("Cut")) {
             str = ta.getSelectedText();
@@ -218,7 +216,7 @@ class TextEditor extends JFrame implements ActionListener {
             AboutDialog d1 = new AboutDialog(this, "About TextEditor", true);
             d1.setVisible(true);
         }
-        if(arg.equals("Find")){
+        if (arg.equals("Find")) {
             String stringToFind = JOptionPane.showInputDialog(null, "What would you like to find?",
                     "Find", JOptionPane.INFORMATION_MESSAGE);
             // i'll get to you one day
@@ -229,14 +227,14 @@ class TextEditor extends JFrame implements ActionListener {
             ta.select(offset, offset + length);
 
         }
-        if(arg.equals("Find Next")){
+        if (arg.equals("Find Next")) {
             String stringToFind = JOptionPane.showInputDialog(null,
                     "What would you like to find next occurrence of?", "Find Next", JOptionPane.INFORMATION_MESSAGE);
             int loc = ta.getCaretPosition();
             int offset = ta.getText().indexOf(stringToFind, loc);
             ta.select(offset, offset + stringToFind.length());
         }
-        if(arg.equals("Replace")) {
+        if (arg.equals("Replace")) {
             JTextField stringToFind = new JTextField();
             JTextField stringToReplaceWith = new JTextField();
             Object[] message = {
@@ -244,30 +242,29 @@ class TextEditor extends JFrame implements ActionListener {
                     "Replace:", stringToReplaceWith};
 
             int option = JOptionPane.showConfirmDialog(null, message, "Find and Replace", JOptionPane.OK_CANCEL_OPTION);
-            if (option == JOptionPane.OK_OPTION){
+            if (option == JOptionPane.OK_OPTION) {
                 int offset = ta.getText().indexOf(stringToFind.getText());
                 ta.replaceRange(stringToReplaceWith.getText(), offset, offset + stringToFind.getText().length());
                 ta.setCaretPosition(offset + stringToReplaceWith.getText().length());
             }
         }
-        if(arg.equals("Help Topics")){
+        if (arg.equals("Help Topics")) {
             AboutDialog d2 = new AboutDialog(this, "Get Help from TextEditor", false);
             d2.setVisible(true);
         }
-        if(arg.equals("Word Wrap")){
+        if (arg.equals("Word Wrap")) {
             ta.setLineWrap(chkb.getState());
             ta.setWrapStyleWord(chkb.getState());
         }
-        if(arg.equals("Choose Font")){
+        if (arg.equals("Choose Font")) {
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             Font[] fonts = ge.getAllFonts();
             String[] fontNames = Arrays.stream(fonts).map(Font::getFontName).toArray(String[]::new);
             JComboBox<String> comboBox = new JComboBox<>(fontNames);
             JOptionPane.showMessageDialog(null, comboBox, "Select Font", JOptionPane.QUESTION_MESSAGE);
             // Question message shows our lil mascot dude :)
-            ta.setFont(new Font((String)comboBox.getSelectedItem(), Font.PLAIN, 14));
+            ta.setFont(new Font((String) comboBox.getSelectedItem(), Font.PLAIN, 14));
         }
-        setTitle(title);
     }
 
     public static void main(String args[]) {
@@ -281,6 +278,7 @@ class CheckBoxItemListener implements ItemListener {
     public CheckBoxItemListener(TextEditor ttt) {
         tt = ttt;
     }
+
     @Override
     public void itemStateChanged(ItemEvent e) {
         tt.actionPerformed(new ActionEvent(tt, 0, "Word Wrap"));
@@ -295,7 +293,7 @@ class MyWindowsAdapter extends WindowAdapter {
     }
 
     public void windowClosing(WindowEvent we) {
-        if(!tt.ta.getText().isEmpty()) {
+        if (!tt.ta.getText().isEmpty()) {
             tt.actionPerformed(new ActionEvent(tt, 0, "Save"));
         }
         tt.dispose();
@@ -306,7 +304,7 @@ class AboutDialog extends JDialog implements ActionListener {
     String about_msg = "\n\n\t\t  Welcome to TextEditor!\n\n" +
             "   Developed by a bunch of talented cats who are passionate about destroying things.";
     String help_msg = "Too dumb for our program? Maybe you're new here? TextEditor is here to help!\n\n" +
-           "Most of the buttons are pretty self explanatory.\n\n" +
+            "Most of the buttons are pretty self explanatory.\n\n" +
             "We will save your progress when you click that red close window button...\n" +
             "... unless you CHOOSE to cancel during \"Save As\"... then... well... you know.\n\n" +
             "This help window will stay here as long as you need it to. But please, just play around with the features." +

@@ -17,3 +17,10 @@ Things to add:
 - Make your About Dialog snazzy!
 
 This text editor is kinda lit
+Because we made it Taylor :)
+
+CHRISTINE NOTES FOR YOU: the title was getting reset because the try-catches were outside of the
+if statements. I changed it so the if statements are now on the outside and wrap the try-catches.
+I also fixed a bug where if you cancel your save as, then we print to the console that the user 
+close the dialog and didn't want to save - that prevents us from renaming our text file editor
+jframe thing as "null TextFile Editor"
